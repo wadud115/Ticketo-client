@@ -7,16 +7,23 @@ import { FaUser, FaEnvelope, FaLock, FaImage, FaGoogle } from "react-icons/fa";
 import Logo from "@/components/Logo";
 import { useForm } from "react-hook-form";
 import { maxLength } from "better-auth";
+import { authClient } from "@/lib/auth-client";
 
 
 
 
 export default function RegisterPage() {
 
+
     const {register, handleSubmit,  formState: { errors } } = useForm()
 
-const onSubmit = (data)=>{
-    console.log(data)
+const onSubmit = async(data)=>{
+   
+    const { data: signUpData, error:signUperror } = await authClient.signUp.email({
+       ...data
+    })
+
+    console.log(signUpData, signUperror)
 }
     return (
        <div>
@@ -34,7 +41,7 @@ const onSubmit = (data)=>{
                 <Form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
-                            {...register("Name", { required: " name is required", })}
+                            {...register("name", { required: " name is required", })}
 
                         id="name"
                         placeholder="John Doe"
